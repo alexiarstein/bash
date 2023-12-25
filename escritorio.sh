@@ -1,0 +1,41 @@
+
+#!/bin/bash
+# Meramente una prueba
+# Sientanse libres de editarlo, mejorarlo, y tirar un pull request :3
+
+wget --quiet -O /tmp/tmp.subte https://www.enelsubte.com/estado/
+grep  "estado-subtes-pastilla" /tmp/tmp.subte | awk -F '>' '{print $2}' | tr '</div' ' ' > /tmp/tmp.letras
+grep -m7 "estado-subtes-estado" /tmp/tmp.subte | awk -F '>' '{print $2}' | sed "s/<\/div//g" > /tmp/tmp.estados
+
+verde=$(tput setaf 02)
+rojo=$(tput setaf 01)
+naranja=$(tput setaf 03)
+azul=$(tput setaf 04)
+violeta=$(tput setaf 05)
+celeste=$(tput setaf 06)
+amarillo=$(tput setaf 11)
+reset=$(tput init)
+declare -A colorcitos=(
+["A"]="${celeste}Linea A  ${reset}  "
+["B"]="${rojo}Linea B  ${reset}  "
+["C"]="${azul}Linea C  ${reset}  "
+["D"]="${verde}Linea D  ${reset}  "
+["E"]="${violeta}Linea E  ${reset}  "
+["H"]="${amarillo}Linea H ${reset}  "
+["P"]="${naranja}Premetro   ${reset}  "
+)
+
+while read i; do echo ${colorcitos[$i]}; done < /tmp/tmp.letras  > /tmp/tmp.letras2
+echo -e "\nEstado de la red de subterraneos de Buenos Aires\n" > /tmp/tmp.subtes
+paste /tmp/tmp.letras2 /tmp/tmp.estados >> /tmp/tmp.subtes
+cat /tmp/tmp.subtes
+
+wget --quiet -O /tmp/tmp.clima https://clima.com/argentina/buenos-aires/buenos-aires
+temp=$(grep currentTemperature /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
+estado=$(grep weatherForecast /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
+declare -A tradu=(
+["Partly cloudy"]="Parcialmente Nublado"
+)
+echo -e "\nEstado del Clima\n"
+echo "Temperatura Actual: $temp (${tradu[$estado]})"
+rm /tmp/tmp.*

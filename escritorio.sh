@@ -37,6 +37,9 @@ cat /tmp/tmp.subtes
 wget --quiet -O /tmp/tmp.clima https://clima.com/argentina/buenos-aires/buenos-aires
 temp=$(grep currentTemperature /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
 estado=$(grep weatherForecast /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
-echo -e "\nEstado del Clima\n"
-echo "Temperatura Actual: $temp (${tradu[$estado]})"
+echo -e "\nTemperatura Actual:        ${celeste} $temp (${tradu[$estado]}) ${reset}" 
+
+wget --quiet -O /tmp/tmp.dolar https://dolarhoy.com/i/cotizaciones/dolar-blue
+dolarBlue=$(grep -Po '<div class="data__valores"><p>\K\d+(\.\d+)?(?=<span>)' /tmp/tmp.dolar)
+echo -e "Valor del Dolar Blue Hoy:  ${verde} \$${dolarBlue}${reset}\n" 
 rm /tmp/tmp.*

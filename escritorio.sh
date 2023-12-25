@@ -1,5 +1,8 @@
-
 #!/bin/bash
+#
+# A ver que se les ocurre.
+# Sientanse libres de mejorarlo, repensarlo y hacer un PR :3
+
 wget --quiet -O /tmp/tmp.subte https://www.enelsubte.com/estado/
 grep  "estado-subtes-pastilla" /tmp/tmp.subte | awk -F '>' '{print $2}' | tr '</div' ' ' > /tmp/tmp.letras
 grep -m7 "estado-subtes-estado" /tmp/tmp.subte | awk -F '>' '{print $2}' | sed "s/<\/div//g" > /tmp/tmp.estados
@@ -21,6 +24,10 @@ declare -A colorcitos=(
 ["H"]="${amarillo}Linea H ${reset}  "
 ["P"]="${naranja}Premetro   ${reset}  "
 )
+declare -A tradu=(
+["Partly cloudy"]="Parcialmente Nublado"
+["Mostly clear"]="Cielo Despejado"
+)
 
 while read i; do echo ${colorcitos[$i]}; done < /tmp/tmp.letras  > /tmp/tmp.letras2
 echo -e "\nEstado de la red de subterraneos de Buenos Aires\n" > /tmp/tmp.subtes
@@ -30,10 +37,6 @@ cat /tmp/tmp.subtes
 wget --quiet -O /tmp/tmp.clima https://clima.com/argentina/buenos-aires/buenos-aires
 temp=$(grep currentTemperature /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
 estado=$(grep weatherForecast /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
-declare -A tradu=(
-["Partly cloudy"]="Parcialmente Nublado"
-["Mostly clear"]="Cielo Despejado"
-)
 echo -e "\nEstado del Clima\n"
 echo "Temperatura Actual: $temp (${tradu[$estado]})"
 rm /tmp/tmp.*

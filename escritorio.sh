@@ -1,8 +1,5 @@
 
 #!/bin/bash
-# Meramente una prueba
-# Sientanse libres de editarlo, mejorarlo, y tirar un pull request :3
-
 wget --quiet -O /tmp/tmp.subte https://www.enelsubte.com/estado/
 grep  "estado-subtes-pastilla" /tmp/tmp.subte | awk -F '>' '{print $2}' | tr '</div' ' ' > /tmp/tmp.letras
 grep -m7 "estado-subtes-estado" /tmp/tmp.subte | awk -F '>' '{print $2}' | sed "s/<\/div//g" > /tmp/tmp.estados
@@ -35,6 +32,7 @@ temp=$(grep currentTemperature /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s
 estado=$(grep weatherForecast /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
 declare -A tradu=(
 ["Partly cloudy"]="Parcialmente Nublado"
+["Mostly clear"]="Cielo Despejado"
 )
 echo -e "\nEstado del Clima\n"
 echo "Temperatura Actual: $temp (${tradu[$estado]})"

@@ -27,6 +27,7 @@ declare -A colorcitos=(
 declare -A tradu=(
 ["Partly cloudy"]="Parcialmente Nublado"
 ["Mostly clear"]="Cielo Despejado"
+["Clear"]="Despejado"
 )
 
 while read i; do echo ${colorcitos[$i]}; done < /tmp/tmp.letras  > /tmp/tmp.letras2

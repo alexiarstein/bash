@@ -1,6 +1,8 @@
 #!/bin/bash
-#
-# A ver que se les ocurre.
+# Autora: Alexia Steinberg <lachicadesistemas@gmail.com>
+# ------------------------------------------------------
+# Este script es parte de un video educativo para mostrar como 
+# se puede hacer un poquitito de webscraping con bash usando curl y wget.
 # Sientanse libres de mejorarlo, repensarlo y hacer un PR :3
 
 wget --quiet -O /tmp/tmp.subte https://www.enelsubte.com/estado/

@@ -27,18 +27,25 @@ declare -A colorcitos=(
 declare -A tradu=(
 ["Partly cloudy"]="Parcialmente Nublado"
 ["Mostly clear"]="Cielo Despejado"
+["Overcast"]="Nublado"
 ["Clear"]="Despejado"
+["Sunny"]="Soleado"
 )
 
 while read i; do echo ${colorcitos[$i]}; done < /tmp/tmp.letras  > /tmp/tmp.letras2
 echo -e "\nEstado de la red de subterraneos de Buenos Aires\n" > /tmp/tmp.subtes
 paste /tmp/tmp.letras2 /tmp/tmp.estados >> /tmp/tmp.subtes
 cat /tmp/tmp.subtes
+echo ""
+mapfile -t output < <(curl -s wttr.in | head -n 7 | sed 's/Weather report:/Clima en/g')
+for x in "${!tradu[@]}"; do
+if grep -q "$x" <<< "${output[2]}"; then
+output[2]=$(echo "${output[2]}" | sed "s/\b$x\b/${tradu[$x]}/g")
+fi
+done
+printf "%s\n" "${output[@]}"
+echo "" 
 
-wget --quiet -O /tmp/tmp.clima https://clima.com/argentina/buenos-aires/buenos-aires
-temp=$(grep currentTemperature /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
-estado=$(grep weatherForecast /tmp/tmp.clima | awk -F ':' '{print $2}' | sed "s/[',]//g")
-echo -e "\nTemperatura Actual:        ${celeste} $temp (${tradu[$estado]}) ${reset}" 
 
 wget --quiet -O /tmp/tmp.dolar https://dolarhoy.com/i/cotizaciones/dolar-blue
 dolarBlue=$(grep -Po '<div class="data__valores"><p>\K\d+(\.\d+)?(?=<span>)' /tmp/tmp.dolar)

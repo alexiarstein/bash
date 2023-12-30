@@ -1,5 +1,5 @@
 #!/bin/bash
-# Autora: Alexia Steinberg <lachicadesistemas@gmail.com>
+# Autora: Alexia Steinberg <alexiarstein@aol.com>
 # ------------------------------------------------------
 # Este script es parte de un video educativo para mostrar como 
 # se puede hacer un poquitito de webscraping con bash usando curl y wget.

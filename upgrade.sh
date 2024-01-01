@@ -63,35 +63,18 @@ esac
 else
 source ~/.deb-package-updater.conf
 fi
-# por ahora comentado. No me termina de convencer.
-#if grep -q "Listing..." "$opf"; then
-#echo "${tr[systemupdated]}"
-#exit 1
-#else
-#sudo apt list --upgradable | grep -v "Listing..." | awk -F '/' '{print $1}' > /tmp/upgrade
-#fi
-
-# El segundo intento evalua si el output para paquetes es igual a 0 bytes. Si es igual a 0 no hay updates
-# si es mayor que 0 entonces algo logueo jej (habria updates)
-# Primero genero la lista de paquetes, que puede tener o no tener paquetes.
+# First we get the list of packages available. If there are none, the file will be 0 bytes. 
+# Keep reading to understand my reasoning :P
 sudo apt list --upgradable | grep -v "Listing..." | awk -F '/' '{print $1}' > /tmp/upgrade
 
-# Y ahora si. Si dicha lista pesa 0 bytes, entonces no hay updates, modo contrario continua el resto del script.
-# Si se les ocurre una manera mas eficiente de razonarlo, por favor envien pull request.
+# Now, if the file is 0 bytes, it means there are no updates, and cancels out the rest of the script with a message.
+# Otherwise it keeps going. 
+# If you are able to find a better way to reason this, please correct it :)
+
 if [ ! -s "$opf" ]; then
 echo "${tr[systemupdated]}"
 exit 0
 fi
-
-declare -A tr=(
-["title"]="Seleccionar Paquetes a Actualizar"    
-["backtitle"]="Hola ${fullname}!                                              (Debian Package Upgrader $version Por Alexia Steinberg <alexiarstein@aol.com>"
-["select-package"]="Selecione que paquetes desea actualizar:"
-["package-successful"]="¡Paquetes actualizados con éxito!"
-["package-failed"]="No se actualizaron paquetes."
-["updatecomplete"]="Actualizacion Completa"
-["updatecanceled"]="Actualizacion Cancelada"
-
 
 # Create an array to store options
 options=()

@@ -1,9 +1,10 @@
 #!/bin/bash
 
 histfile="$HOME/.bash_history"
+cant="$1"
 if [ -f "$histfile" ]; then
-	cmdrank=$(awk '{print $1}' "$histfile" | sort | uniq -c | sort -nr | head -n 5) 
-echo "Mis 5 comandos mas utilizados:"
+	cmdrank=$(awk '{print $1}' "$histfile" | sort | uniq -c | sort -nr | head -n $cant) 
+echo "Mis $cant comandos mas utilizados:"
 echo "$cmdrank"
 
 else

@@ -1,0 +1,10 @@
+#!/bin/bash
+# An application process graceful killer
+# Author: Alexia Michelle <alexia@goldendoglinux.org>
+
+# It's a "semantic" process ID killer in the sense that it allows a process to be killed by its partial name
+# Usage: bash sk <application name>
+# example: bash sk steam
+
+ps aux | grep -i $1 | awk '{print $2}' > /tmp/.kill; while read i; do kill $i; done < /tmp/.kill
+rm /tmp/.kill
